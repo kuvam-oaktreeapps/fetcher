@@ -25,8 +25,10 @@ class Fetcher {
       try {
         const jsonData = await res.json();
         setData(jsonData);
+        opts?.onSuccess?.(jsonData);
       } catch (e) {
         setError({ status: res.status, fetchResponse: res });
+        opts?.onError?.({ status: res.status, fetchResponse: res });
       }
 
       setLoading(false);

@@ -1,5 +1,13 @@
 {
-  "name": "usefetcher",
+  "name": "@kuvam/usefetcher",
+  "displayName": "usefetcher",
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": {
+    "name": "Kuvam",
+    "email": "kuvambhardwaj0529@gmail.com"
+  },
   "description": "A type-safe simple & li8ghtweight fetch wrapper with convenient hooks like 'useGET' & 'usePOST'",
   "version": "0.1.0",
   "main": "dist/index.mjs",

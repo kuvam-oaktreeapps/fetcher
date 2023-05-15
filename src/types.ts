@@ -18,3 +18,19 @@ export type UsePOSTOptions = {
   onLoadingEnd?: () => void;
   headers?: { [key: string]: string };
 };
+
+export type UseDELETEOptions = {
+  onSuccess?: () => void;
+  onError?: ({ status, fetchResponse }: { status: number; fetchResponse: Response }) => void;
+  onLoadingStart?: () => void;
+  onLoadingEnd?: () => void;
+  headers?: { [key: string]: string };
+};
+
+export type UsePATCHOptions = {
+  onSuccess?: () => void;
+  onError?: ({ status, fetchResponse }: { status: number; fetchResponse: Response }) => void;
+  onLoadingStart?: () => void;
+  onLoadingEnd?: () => void;
+  headers?: { [key: string]: string };
+};

@@ -28,6 +28,30 @@ type UsePOSTOptions = {
         [key: string]: string;
     };
 };
+type UseDELETEOptions = {
+    onSuccess?: () => void;
+    onError?: ({ status, fetchResponse }: {
+        status: number;
+        fetchResponse: Response;
+    }) => void;
+    onLoadingStart?: () => void;
+    onLoadingEnd?: () => void;
+    headers?: {
+        [key: string]: string;
+    };
+};
+type UsePATCHOptions = {
+    onSuccess?: () => void;
+    onError?: ({ status, fetchResponse }: {
+        status: number;
+        fetchResponse: Response;
+    }) => void;
+    onLoadingStart?: () => void;
+    onLoadingEnd?: () => void;
+    headers?: {
+        [key: string]: string;
+    };
+};
 
 declare class Fetcher {
     baseUrl: string;
@@ -37,7 +61,7 @@ declare class Fetcher {
     constructor(baseUrl: string, headers?: () => {
         [key: string]: string;
     });
-    useGET<T>(urlPathname: string, opts?: UseGETOptions<T>): {
+    useGET<T>(url: string, opts?: UseGETOptions<T>): {
         data: T | null;
         isError: {
             status: number;
@@ -46,8 +70,24 @@ declare class Fetcher {
         isLoading: boolean;
         refetch: () => Promise<void>;
     };
-    usePOST<T>(urlPathname: string, opts?: UsePOSTOptions): {
-        post: (body: T) => Promise<void>;
+    usePOST(url: string, opts?: UsePOSTOptions): {
+        post: (body: any) => Promise<void>;
+        isError: {
+            status: number;
+            fetchResponse: Response;
+        } | null;
+        isLoading: boolean;
+    };
+    useDELETE(url: string, opts?: UseDELETEOptions): {
+        isError: {
+            status: number;
+            fetchResponse: Response;
+        } | null;
+        isLoading: boolean;
+        delete: () => Promise<void>;
+    };
+    usePATCH(url: string, opts?: UsePATCHOptions): {
+        patch: (body: any) => Promise<void>;
         isError: {
             status: number;
             fetchResponse: Response;

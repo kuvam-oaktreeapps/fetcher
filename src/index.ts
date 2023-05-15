@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FetcherInit, UseGETOptions, UsePOSTOptions } from "./types";
+import { FetcherInit, UseDELETEOptions, UseGETOptions, UsePATCHOptions, UsePOSTOptions } from "./types";
 
 class Fetcher {
   baseUrl: string;
@@ -10,7 +10,7 @@ class Fetcher {
     this.headers = headers;
   }
 
-  useGET<T>(urlPathname: string, opts?: UseGETOptions<T>) {
+  useGET<T>(url: string, opts?: UseGETOptions<T>) {
     const [data, setData] = useState<T | null>(null);
     const [isError, setError] = useState<{ status: number; fetchResponse: Response } | null>(null);
     const [isLoading, setLoading] = useState(false);
@@ -19,14 +19,21 @@ class Fetcher {
       setLoading(true);
       opts?.onLoadingStart?.();
 
-      const res = await fetch(this.baseUrl + urlPathname, {
+      const res = await fetch(this.baseUrl + url, {
         headers: { ...this.headers?.(), ...opts?.headers },
       });
-      try {
-        const jsonData = await res.json();
-        setData(jsonData);
-        opts?.onSuccess?.(jsonData);
-      } catch (e) {
+
+      if (res.status.toString().startsWith("2")) {
+        try {
+          const jsonData = await res.json();
+          setData(jsonData);
+          opts?.onSuccess?.(jsonData as T);
+        } catch (err) {
+          const text = await res.text();
+          setData(text as T);
+          opts?.onSuccess?.(text as T);
+        }
+      } else {
         setError({ status: res.status, fetchResponse: res });
         opts?.onError?.({ status: res.status, fetchResponse: res });
       }
@@ -42,15 +49,15 @@ class Fetcher {
     return { data, isError, isLoading, refetch: fetchData };
   }
 
-  usePOST<T>(urlPathname: string, opts?: UsePOSTOptions) {
+  usePOST(url: string, opts?: UsePOSTOptions) {
     const [isError, setError] = useState<{ status: number; fetchResponse: Response } | null>(null);
     const [isLoading, setLoading] = useState(false);
 
-    const postData = async (body: T) => {
+    const postData = async (body: any) => {
       setLoading(true);
       opts?.onLoadingStart?.();
 
-      const res = await fetch(this.baseUrl + urlPathname, {
+      const res = await fetch(this.baseUrl + url, {
         method: "POST",
         headers: { ...this.headers?.(), ...opts?.headers },
         body: JSON.stringify(body),
@@ -68,6 +75,61 @@ class Fetcher {
     };
 
     return { post: postData, isError, isLoading };
+  }
+
+  useDELETE(url: string, opts?: UseDELETEOptions) {
+    const [isError, setError] = useState<{ status: number; fetchResponse: Response } | null>(null);
+    const [isLoading, setLoading] = useState(false);
+
+    const deleteData = async () => {
+      setLoading(true);
+      opts?.onLoadingStart?.();
+
+      const res = await fetch(this.baseUrl + url, {
+        method: "DELETE",
+        headers: { ...this.headers?.(), ...opts?.headers },
+      });
+
+      if (res.status.toString().startsWith("2")) {
+        opts?.onSuccess?.();
+      } else {
+        setError({ status: res.status, fetchResponse: res });
+        opts?.onError?.({ status: res.status, fetchResponse: res });
+      }
+
+      setLoading(false);
+      opts?.onLoadingEnd?.();
+    };
+
+    return { isError, isLoading, delete: deleteData };
+  }
+
+  usePATCH(url: string, opts?: UsePATCHOptions) {
+    const [isError, setError] = useState<{ status: number; fetchResponse: Response } | null>(null);
+    const [isLoading, setLoading] = useState(false);
+
+    const patchData = async (body: any) => {
+      setLoading(true);
+      opts?.onLoadingStart?.();
+
+      const res = await fetch(this.baseUrl + url, {
+        method: "PATCH",
+        headers: { ...this.headers?.(), ...opts?.headers },
+        body: JSON.stringify(body),
+      });
+
+      if (res.status.toString().startsWith("2")) {
+        opts?.onSuccess?.();
+      } else {
+        setError({ status: res.status, fetchResponse: res });
+        opts?.onError?.({ status: res.status, fetchResponse: res });
+      }
+
+      setLoading(false);
+      opts?.onLoadingEnd?.();
+    };
+
+    return { patch: patchData, isError, isLoading };
   }
 }
 

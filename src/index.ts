@@ -17,7 +17,7 @@ class Fetcher {
 
     const fetchData = async () => {
       setLoading(true);
-      opts?.onLoadingStart();
+      opts?.onLoadingStart?.();
 
       const res = await fetch(this.baseUrl + urlPathname, {
         headers: { ...this.headers?.(), ...opts?.headers },
@@ -30,7 +30,7 @@ class Fetcher {
       }
 
       setLoading(false);
-      opts?.onLoadingEnd();
+      opts?.onLoadingEnd?.();
     };
 
     useEffect(() => {
@@ -46,7 +46,7 @@ class Fetcher {
 
     const postData = async (body: T) => {
       setLoading(true);
-      opts?.onLoadingStart();
+      opts?.onLoadingStart?.();
 
       const res = await fetch(this.baseUrl + urlPathname, {
         method: "POST",
@@ -55,14 +55,14 @@ class Fetcher {
       });
 
       if (res.status.toString().startsWith("2")) {
-        opts?.onSuccess();
+        opts?.onSuccess?.();
       } else {
         setError({ status: res.status, fetchResponse: res });
-        opts?.onError({ status: res.status, fetchResponse: res });
+        opts?.onError?.({ status: res.status, fetchResponse: res });
       }
 
       setLoading(false);
-      opts?.onLoadingEnd();
+      opts?.onLoadingEnd?.();
     };
 
     return { post: postData, isError, isLoading };

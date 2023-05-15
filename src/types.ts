@@ -4,17 +4,17 @@ export type FetcherInit = {
 };
 
 export type UseGETOptions<T> = {
-  onSuccess: (data: T) => void;
-  onError: ({ status, fetchResponse }: { status: number; fetchResponse: Response }) => void;
-  onLoadingStart: () => void;
-  onLoadingEnd: () => void;
+  onSuccess?: (data: T) => void;
+  onError?: ({ status, fetchResponse }: { status: number; fetchResponse: Response }) => void;
+  onLoadingStart?: () => void;
+  onLoadingEnd?: () => void;
   headers?: { [key: string]: string };
 };
 
 export type UsePOSTOptions = {
-  onSuccess: () => void;
-  onError: ({ status, fetchResponse }: { status: number; fetchResponse: Response }) => void;
-  onLoadingStart: () => void;
-  onLoadingEnd: () => void;
+  onSuccess?: () => void;
+  onError?: ({ status, fetchResponse }: { status: number; fetchResponse: Response }) => void;
+  onLoadingStart?: () => void;
+  onLoadingEnd?: () => void;
   headers?: { [key: string]: string };
 };

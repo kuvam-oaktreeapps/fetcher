@@ -5,25 +5,25 @@ type FetcherInit = {
     };
 };
 type UseGETOptions<T> = {
-    onSuccess: (data: T) => void;
-    onError: ({ status, fetchResponse }: {
+    onSuccess?: (data: T) => void;
+    onError?: ({ status, fetchResponse }: {
         status: number;
         fetchResponse: Response;
     }) => void;
-    onLoadingStart: () => void;
-    onLoadingEnd: () => void;
+    onLoadingStart?: () => void;
+    onLoadingEnd?: () => void;
     headers?: {
         [key: string]: string;
     };
 };
 type UsePOSTOptions = {
-    onSuccess: () => void;
-    onError: ({ status, fetchResponse }: {
+    onSuccess?: () => void;
+    onError?: ({ status, fetchResponse }: {
         status: number;
         fetchResponse: Response;
     }) => void;
-    onLoadingStart: () => void;
-    onLoadingEnd: () => void;
+    onLoadingStart?: () => void;
+    onLoadingEnd?: () => void;
     headers?: {
         [key: string]: string;
     };

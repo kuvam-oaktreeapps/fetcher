@@ -1,5 +1,5 @@
 {
-  "name": "@kuvam/usefetcher",
+  "name": "@dazeus/usefetcher",
   "displayName": "usefetcher",
   "publishConfig": {
     "access": "public"
@@ -8,7 +8,7 @@
     "name": "Kuvam",
     "email": "kuvambhardwaj0529@gmail.com"
   },
-  "description": "A type-safe simple & li8ghtweight fetch wrapper with convenient hooks like 'useGET' & 'usePOST'",
+  "description": "A type-safe simple & lightweight fetch wrapper with convenient hooks like 'useGET' & 'usePOST'",
   "version": "0.1.0",
   "main": "dist/index.mjs",
   "types": "dist/index.d.ts",

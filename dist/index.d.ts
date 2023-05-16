@@ -68,10 +68,10 @@ declare class Fetcher {
             fetchResponse: Response;
         } | null;
         isLoading: boolean;
-        refetch: () => Promise<void>;
+        refetchData: () => Promise<void>;
     };
     usePOST(url: string, opts?: UsePOSTOptions): {
-        post: (body: any) => Promise<void>;
+        postData: (body: any) => Promise<void>;
         isError: {
             status: number;
             fetchResponse: Response;
@@ -84,10 +84,10 @@ declare class Fetcher {
             fetchResponse: Response;
         } | null;
         isLoading: boolean;
-        delete: (url: string) => Promise<void>;
+        deleteData: (url: string) => Promise<void>;
     };
-    usePATCH(url: string, opts?: UsePATCHOptions): {
-        patch: (body: any) => Promise<void>;
+    usePATCH(opts?: UsePATCHOptions): {
+        patchData: (url: string, body: any) => Promise<void>;
         isError: {
             status: number;
             fetchResponse: Response;

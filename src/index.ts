@@ -46,7 +46,7 @@ class Fetcher {
       fetchData();
     }, []);
 
-    return { data, isError, isLoading, refetch: fetchData };
+    return { data, isError, isLoading, refetchData: fetchData };
   }
 
   usePOST(url: string, opts?: UsePOSTOptions) {
@@ -74,7 +74,7 @@ class Fetcher {
       opts?.onLoadingEnd?.();
     };
 
-    return { post: postData, isError, isLoading };
+    return { postData, isError, isLoading };
   }
 
   useDELETE(opts?: UseDELETEOptions) {
@@ -101,14 +101,14 @@ class Fetcher {
       opts?.onLoadingEnd?.();
     };
 
-    return { isError, isLoading, delete: deleteData };
+    return { isError, isLoading, deleteData };
   }
 
-  usePATCH(url: string, opts?: UsePATCHOptions) {
+  usePATCH(opts?: UsePATCHOptions) {
     const [isError, setError] = useState<{ status: number; fetchResponse: Response } | null>(null);
     const [isLoading, setLoading] = useState(false);
 
-    const patchData = async (body: any) => {
+    const patchData = async (url: string, body: any) => {
       setLoading(true);
       opts?.onLoadingStart?.();
 
@@ -129,7 +129,7 @@ class Fetcher {
       opts?.onLoadingEnd?.();
     };
 
-    return { patch: patchData, isError, isLoading };
+    return { patchData, isError, isLoading };
   }
 }
 

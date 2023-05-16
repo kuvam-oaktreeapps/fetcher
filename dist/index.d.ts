@@ -78,13 +78,13 @@ declare class Fetcher {
         } | null;
         isLoading: boolean;
     };
-    useDELETE(url: string, opts?: UseDELETEOptions): {
+    useDELETE(opts?: UseDELETEOptions): {
         isError: {
             status: number;
             fetchResponse: Response;
         } | null;
         isLoading: boolean;
-        delete: () => Promise<void>;
+        delete: (url: string) => Promise<void>;
     };
     usePATCH(url: string, opts?: UsePATCHOptions): {
         patch: (body: any) => Promise<void>;

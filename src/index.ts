@@ -13,7 +13,7 @@ class Fetcher {
   useGET<T>(url: string, opts?: UseGETOptions<T>) {
     const [data, setData] = useState<T | null>(null);
     const [isError, setError] = useState<{ status: number; fetchResponse: Response } | null>(null);
-    const [isLoading, setLoading] = useState(false);
+    const [isLoading, setLoading] = useState(true);
 
     const fetchData = async () => {
       setLoading(true);
@@ -77,11 +77,11 @@ class Fetcher {
     return { post: postData, isError, isLoading };
   }
 
-  useDELETE(url: string, opts?: UseDELETEOptions) {
+  useDELETE(opts?: UseDELETEOptions) {
     const [isError, setError] = useState<{ status: number; fetchResponse: Response } | null>(null);
     const [isLoading, setLoading] = useState(false);
 
-    const deleteData = async () => {
+    const deleteData = async (url: string) => {
       setLoading(true);
       opts?.onLoadingStart?.();
 

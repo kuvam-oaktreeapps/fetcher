@@ -11,24 +11,24 @@ export type UseGETOptions<T> = {
   headers?: { [key: string]: string };
 };
 
-export type UsePOSTOptions = {
-  onSuccess?: () => void;
+export type UsePOSTOptions<T> = {
+  onSuccess?: (data: T) => void;
   onError?: ({ status, fetchResponse }: { status: number; fetchResponse: Response }) => void;
   onLoadingStart?: () => void;
   onLoadingEnd?: () => void;
   headers?: { [key: string]: string };
 };
 
-export type UseDELETEOptions = {
-  onSuccess?: () => void;
+export type UseDELETEOptions<T> = {
+  onSuccess?: (data: T) => void;
   onError?: ({ status, fetchResponse }: { status: number; fetchResponse: Response }) => void;
   onLoadingStart?: () => void;
   onLoadingEnd?: () => void;
   headers?: { [key: string]: string };
 };
 
-export type UsePATCHOptions = {
-  onSuccess?: () => void;
+export type UsePATCHOptions<T> = {
+  onSuccess?: (data: T) => void;
   onError?: ({ status, fetchResponse }: { status: number; fetchResponse: Response }) => void;
   onLoadingStart?: () => void;
   onLoadingEnd?: () => void;

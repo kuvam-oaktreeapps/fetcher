@@ -9,7 +9,7 @@
     "email": "kuvambhardwaj0529@gmail.com"
   },
   "description": "A type-safe simple & lightweight fetch wrapper with convenient hooks like 'useGET' & 'usePOST'",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "main": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "license": "MIT",

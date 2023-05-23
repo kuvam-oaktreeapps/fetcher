@@ -53,7 +53,8 @@ class Fetcher {
     return { data, isError, isLoading, refetchData: fetchData };
   }
 
-  usePOST(url: string, opts?: UsePOSTOptions) {
+  usePOST<T>(url: string, opts?: UsePOSTOptions<T>) {
+    const [data, setData] = useState<T | null>(null);
     const [isError, setError] = useState<{ status: number; fetchResponse: Response } | null>(null);
     const [isLoading, setLoading] = useState(false);
 
@@ -68,7 +69,15 @@ class Fetcher {
       });
 
       if (res.status.toString().startsWith("2")) {
-        opts?.onSuccess?.();
+        try {
+          const jsonData = await res.json();
+          setData(jsonData);
+          opts?.onSuccess?.(jsonData as T);
+        } catch (err) {
+          const text = await res.text();
+          setData(text as T);
+          opts?.onSuccess?.(text as T);
+        }
       } else {
         setError({ status: res.status, fetchResponse: res });
         opts?.onError?.({ status: res.status, fetchResponse: res });
@@ -78,10 +87,11 @@ class Fetcher {
       opts?.onLoadingEnd?.();
     };
 
-    return { postData, isError, isLoading };
+    return { postData, isError, isLoading, data };
   }
 
-  useDELETE(opts?: UseDELETEOptions) {
+  useDELETE<T>(opts?: UseDELETEOptions<T>) {
+    const [data, setData] = useState<T | null>(null);
     const [isError, setError] = useState<{ status: number; fetchResponse: Response } | null>(null);
     const [isLoading, setLoading] = useState(false);
 
@@ -95,7 +105,15 @@ class Fetcher {
       });
 
       if (res.status.toString().startsWith("2")) {
-        opts?.onSuccess?.();
+        try {
+          const jsonData = await res.json();
+          setData(jsonData);
+          opts?.onSuccess?.(jsonData as T);
+        } catch (err) {
+          const text = await res.text();
+          setData(text as T);
+          opts?.onSuccess?.(text as T);
+        }
       } else {
         setError({ status: res.status, fetchResponse: res });
         opts?.onError?.({ status: res.status, fetchResponse: res });
@@ -105,10 +123,11 @@ class Fetcher {
       opts?.onLoadingEnd?.();
     };
 
-    return { isError, isLoading, deleteData };
+    return { isError, isLoading, deleteData, data };
   }
 
-  usePATCH(opts?: UsePATCHOptions) {
+  usePATCH<T>(opts?: UsePATCHOptions<T>) {
+    const [data, setData] = useState<T | null>(null);
     const [isError, setError] = useState<{ status: number; fetchResponse: Response } | null>(null);
     const [isLoading, setLoading] = useState(false);
 
@@ -123,7 +142,15 @@ class Fetcher {
       });
 
       if (res.status.toString().startsWith("2")) {
-        opts?.onSuccess?.();
+        try {
+          const jsonData = await res.json();
+          setData(jsonData);
+          opts?.onSuccess?.(jsonData as T);
+        } catch (err) {
+          const text = await res.text();
+          setData(text as T);
+          opts?.onSuccess?.(text as T);
+        }
       } else {
         setError({ status: res.status, fetchResponse: res });
         opts?.onError?.({ status: res.status, fetchResponse: res });
@@ -133,7 +160,7 @@ class Fetcher {
       opts?.onLoadingEnd?.();
     };
 
-    return { patchData, isError, isLoading };
+    return { patchData, isError, isLoading, data };
   }
 }
 

@@ -16,8 +16,8 @@ type UseGETOptions<T> = {
         [key: string]: string;
     };
 };
-type UsePOSTOptions = {
-    onSuccess?: () => void;
+type UsePOSTOptions<T> = {
+    onSuccess?: (data: T) => void;
     onError?: ({ status, fetchResponse }: {
         status: number;
         fetchResponse: Response;
@@ -28,8 +28,8 @@ type UsePOSTOptions = {
         [key: string]: string;
     };
 };
-type UseDELETEOptions = {
-    onSuccess?: () => void;
+type UseDELETEOptions<T> = {
+    onSuccess?: (data: T) => void;
     onError?: ({ status, fetchResponse }: {
         status: number;
         fetchResponse: Response;
@@ -40,8 +40,8 @@ type UseDELETEOptions = {
         [key: string]: string;
     };
 };
-type UsePATCHOptions = {
-    onSuccess?: () => void;
+type UsePATCHOptions<T> = {
+    onSuccess?: (data: T) => void;
     onError?: ({ status, fetchResponse }: {
         status: number;
         fetchResponse: Response;
@@ -70,29 +70,32 @@ declare class Fetcher {
         isLoading: boolean;
         refetchData: () => Promise<void>;
     };
-    usePOST(url: string, opts?: UsePOSTOptions): {
+    usePOST<T>(url: string, opts?: UsePOSTOptions<T>): {
         postData: (body: any) => Promise<void>;
         isError: {
             status: number;
             fetchResponse: Response;
         } | null;
         isLoading: boolean;
+        data: T | null;
     };
-    useDELETE(opts?: UseDELETEOptions): {
+    useDELETE<T>(opts?: UseDELETEOptions<T>): {
         isError: {
             status: number;
             fetchResponse: Response;
         } | null;
         isLoading: boolean;
         deleteData: (url: string) => Promise<void>;
+        data: T | null;
     };
-    usePATCH(opts?: UsePATCHOptions): {
+    usePATCH<T>(opts?: UsePATCHOptions<T>): {
         patchData: (url: string, body: any) => Promise<void>;
         isError: {
             status: number;
             fetchResponse: Response;
         } | null;
         isLoading: boolean;
+        data: T | null;
     };
 }
 declare const createFetcher: (opts: FetcherInit) => Fetcher;

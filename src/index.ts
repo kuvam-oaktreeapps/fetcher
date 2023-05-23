@@ -7,7 +7,11 @@ class Fetcher {
 
   constructor(baseUrl: string, headers?: () => { [key: string]: string }) {
     this.baseUrl = baseUrl;
-    this.headers = headers;
+    this.headers = () => ({
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      ...headers?.(),
+    });
   }
 
   useGET<T>(url: string, opts?: UseGETOptions<T>) {

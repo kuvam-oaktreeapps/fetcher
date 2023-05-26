@@ -53,6 +53,10 @@ type UsePATCHOptions<T> = {
     };
 };
 
+type ResponseError = {
+    status: number;
+    fetchResponse: Response;
+} | null;
 declare class Fetcher {
     baseUrl: string;
     headers?: () => {
@@ -68,10 +72,16 @@ declare class Fetcher {
             fetchResponse: Response;
         } | null;
         isLoading: boolean;
-        refetchData: () => Promise<void>;
+        refetchData: () => Promise<{
+            data: T | null;
+            error: ResponseError;
+        }>;
     };
     usePOST<T>(url: string, opts?: UsePOSTOptions<T>): {
-        postData: (body: any) => Promise<void>;
+        postData: (body: any) => Promise<{
+            data: T | null;
+            error: ResponseError;
+        }>;
         isError: {
             status: number;
             fetchResponse: Response;
@@ -85,11 +95,17 @@ declare class Fetcher {
             fetchResponse: Response;
         } | null;
         isLoading: boolean;
-        deleteData: (url: string) => Promise<void>;
+        deleteData: (url: string) => Promise<{
+            data: T | null;
+            error: ResponseError;
+        }>;
         data: T | null;
     };
     usePATCH<T>(opts?: UsePATCHOptions<T>): {
-        patchData: (url: string, body: any) => Promise<void>;
+        patchData: (url: string, body: any) => Promise<{
+            data: T | null;
+            error: ResponseError;
+        }>;
         isError: {
             status: number;
             fetchResponse: Response;

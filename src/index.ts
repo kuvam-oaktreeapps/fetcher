@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { FetcherInit, UseDELETEOptions, UseGETOptions, UsePATCHOptions, UsePOSTOptions } from "./types";
 
+type ResponseError = { status: number; fetchResponse: Response } | null;
+
 class Fetcher {
   baseUrl: string;
   headers?: () => { [key: string]: string };
@@ -20,6 +22,9 @@ class Fetcher {
     const [isLoading, setLoading] = useState(true);
 
     const fetchData = async () => {
+      let data: T | null = null;
+      let error: ResponseError = null;
+
       setLoading(true);
       opts?.onLoadingStart?.();
 
@@ -29,21 +34,24 @@ class Fetcher {
 
       if (res.status.toString().startsWith("2")) {
         try {
-          const jsonData = await res.json();
-          setData(jsonData);
-          opts?.onSuccess?.(jsonData as T);
+          data = await res.json();
+          setData(data);
+          opts?.onSuccess?.(data as T);
         } catch (err) {
-          const text = await res.text();
-          setData(text as T);
-          opts?.onSuccess?.(text as T);
+          data = (await res.text()) as any;
+          setData(data as T);
+          opts?.onSuccess?.(data as T);
         }
       } else {
-        setError({ status: res.status, fetchResponse: res });
-        opts?.onError?.({ status: res.status, fetchResponse: res });
+        error = { status: res.status, fetchResponse: res };
+        setError(error);
+        opts?.onError?.(error);
       }
 
       setLoading(false);
       opts?.onLoadingEnd?.();
+
+      return { data, error };
     };
 
     useEffect(() => {
@@ -59,6 +67,9 @@ class Fetcher {
     const [isLoading, setLoading] = useState(false);
 
     const postData = async (body: any) => {
+      let data: T | null = null;
+      let error: ResponseError = null;
+
       setLoading(true);
       opts?.onLoadingStart?.();
 
@@ -70,21 +81,24 @@ class Fetcher {
 
       if (res.status.toString().startsWith("2")) {
         try {
-          const jsonData = await res.json();
-          setData(jsonData);
-          opts?.onSuccess?.(jsonData as T);
+          data = await res.json();
+          setData(data);
+          opts?.onSuccess?.(data as T);
         } catch (err) {
-          const text = await res.text();
-          setData(text as T);
-          opts?.onSuccess?.(text as T);
+          data = (await res.text()) as any;
+          setData(data as T);
+          opts?.onSuccess?.(data as T);
         }
       } else {
-        setError({ status: res.status, fetchResponse: res });
-        opts?.onError?.({ status: res.status, fetchResponse: res });
+        error = { status: res.status, fetchResponse: res };
+        setError(error);
+        opts?.onError?.(error);
       }
 
       setLoading(false);
       opts?.onLoadingEnd?.();
+
+      return { data, error };
     };
 
     return { postData, isError, isLoading, data };
@@ -96,6 +110,9 @@ class Fetcher {
     const [isLoading, setLoading] = useState(false);
 
     const deleteData = async (url: string) => {
+      let data: T | null = null;
+      let error: ResponseError = null;
+
       setLoading(true);
       opts?.onLoadingStart?.();
 
@@ -106,21 +123,24 @@ class Fetcher {
 
       if (res.status.toString().startsWith("2")) {
         try {
-          const jsonData = await res.json();
-          setData(jsonData);
-          opts?.onSuccess?.(jsonData as T);
+          data = await res.json();
+          setData(data);
+          opts?.onSuccess?.(data as T);
         } catch (err) {
-          const text = await res.text();
-          setData(text as T);
-          opts?.onSuccess?.(text as T);
+          data = (await res.text()) as any;
+          setData(data as T);
+          opts?.onSuccess?.(data as T);
         }
       } else {
-        setError({ status: res.status, fetchResponse: res });
-        opts?.onError?.({ status: res.status, fetchResponse: res });
+        error = { status: res.status, fetchResponse: res };
+        setError(error);
+        opts?.onError?.(error);
       }
 
       setLoading(false);
       opts?.onLoadingEnd?.();
+
+      return { data, error };
     };
 
     return { isError, isLoading, deleteData, data };
@@ -132,6 +152,9 @@ class Fetcher {
     const [isLoading, setLoading] = useState(false);
 
     const patchData = async (url: string, body: any) => {
+      let data: T | null = null;
+      let error: ResponseError = null;
+
       setLoading(true);
       opts?.onLoadingStart?.();
 
@@ -143,21 +166,24 @@ class Fetcher {
 
       if (res.status.toString().startsWith("2")) {
         try {
-          const jsonData = await res.json();
-          setData(jsonData);
-          opts?.onSuccess?.(jsonData as T);
+          const data = await res.json();
+          setData(data);
+          opts?.onSuccess?.(data as T);
         } catch (err) {
-          const text = await res.text();
-          setData(text as T);
-          opts?.onSuccess?.(text as T);
+          data = (await res.text()) as any;
+          setData(data as T);
+          opts?.onSuccess?.(data as T);
         }
       } else {
-        setError({ status: res.status, fetchResponse: res });
-        opts?.onError?.({ status: res.status, fetchResponse: res });
+        error = { status: res.status, fetchResponse: res };
+        setError(error);
+        opts?.onError?.(error);
       }
 
       setLoading(false);
       opts?.onLoadingEnd?.();
+
+      return { data, error };
     };
 
     return { patchData, isError, isLoading, data };

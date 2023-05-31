@@ -4,73 +4,101 @@ type FetcherInit = {
         [key: string]: string;
     };
 };
-type UseGETOptions<T> = {
+interface ErrResponse {
+    status: number;
+    fetchResponse: Response | null;
+}
+interface StatefulErrResponse<T = any> extends ErrResponse {
+    data: T;
+}
+type Method = "POST" | "GET" | "DELETE" | "PATCH" | "PUT";
+type UseOptions<R = any> = {
+    onSuccess?: (data: R) => void;
+    onError?: ({ status, data, fetchResponse }: StatefulErrResponse) => void;
+    onLoadingStart?: () => void;
+    onLoadingEnd?: () => void;
+    headers?: {
+        [key: string]: string;
+    };
+    method?: Method;
+    body?: any;
+};
+type UseGETOptions<T = any> = {
     onSuccess?: (data: T) => void;
-    onError?: ({ status, fetchResponse }: {
-        status: number;
-        fetchResponse: Response;
-    }) => void;
+    onError?: ({ status, fetchResponse }: ErrResponse) => void;
     onLoadingStart?: () => void;
     onLoadingEnd?: () => void;
     headers?: {
         [key: string]: string;
     };
 };
-type UsePOSTOptions<T> = {
+type UsePOSTOptions<T = any> = {
     onSuccess?: (data: T) => void;
-    onError?: ({ status, fetchResponse }: {
-        status: number;
-        fetchResponse: Response;
-    }) => void;
+    onError?: ({ status, fetchResponse }: ErrResponse) => void;
     onLoadingStart?: () => void;
     onLoadingEnd?: () => void;
     headers?: {
         [key: string]: string;
     };
 };
-type UseDELETEOptions<T> = {
+type UseDELETEOptions<T = any> = {
     onSuccess?: (data: T) => void;
-    onError?: ({ status, fetchResponse }: {
-        status: number;
-        fetchResponse: Response;
-    }) => void;
+    onError?: ({ status, fetchResponse }: ErrResponse) => void;
     onLoadingStart?: () => void;
     onLoadingEnd?: () => void;
     headers?: {
         [key: string]: string;
     };
 };
-type UsePATCHOptions<T> = {
+type UsePATCHOptions<T = any> = {
     onSuccess?: (data: T) => void;
-    onError?: ({ status, fetchResponse }: {
-        status: number;
-        fetchResponse: Response;
-    }) => void;
+    onError?: ({ status, fetchResponse }: ErrResponse) => void;
     onLoadingStart?: () => void;
     onLoadingEnd?: () => void;
     headers?: {
         [key: string]: string;
     };
+};
+type MakeRequestOptions = {
+    headers?: {
+        [key: string]: string;
+    };
+    method: Method;
+    body: any;
 };
 
-type ResponseError = {
-    status: number;
-    fetchResponse: Response;
-} | null;
+type ResponseError = ErrResponse | null;
+type StatefulResponseError<T = any> = StatefulErrResponse<T> | null;
 declare class Fetcher {
     baseUrl: string;
     headers?: () => {
         [key: string]: string;
     };
+    defaultRequestOps: MakeRequestOptions;
     constructor(baseUrl: string, headers?: () => {
         [key: string]: string;
     });
+    request<T>(url: string, opts?: MakeRequestOptions): Promise<{
+        data: T | null;
+        error: StatefulResponseError<any>;
+    }>;
+    use<T>(url: string, opts?: UseOptions<T>): {
+        data: T | null;
+        error: StatefulResponseError<any>;
+        query: () => Promise<{
+            data: T | null;
+            error: StatefulResponseError<any>;
+        }>;
+        mutate: () => Promise<{
+            data: T | null;
+            error: StatefulResponseError<any>;
+        }>;
+        isLoading: boolean;
+        isError: boolean;
+    };
     useGET<T>(url: string, opts?: UseGETOptions<T>): {
         data: T | null;
-        isError: {
-            status: number;
-            fetchResponse: Response;
-        } | null;
+        isError: ResponseError;
         isLoading: boolean;
         refetchData: () => Promise<{
             data: T | null;
@@ -82,18 +110,12 @@ declare class Fetcher {
             data: T | null;
             error: ResponseError;
         }>;
-        isError: {
-            status: number;
-            fetchResponse: Response;
-        } | null;
+        isError: ResponseError;
         isLoading: boolean;
         data: T | null;
     };
     useDELETE<T>(opts?: UseDELETEOptions<T>): {
-        isError: {
-            status: number;
-            fetchResponse: Response;
-        } | null;
+        isError: ResponseError;
         isLoading: boolean;
         deleteData: (url: string) => Promise<{
             data: T | null;
@@ -106,10 +128,7 @@ declare class Fetcher {
             data: T | null;
             error: ResponseError;
         }>;
-        isError: {
-            status: number;
-            fetchResponse: Response;
-        } | null;
+        isError: ResponseError;
         isLoading: boolean;
         data: T | null;
     };

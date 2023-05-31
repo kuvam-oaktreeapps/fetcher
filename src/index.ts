@@ -1,11 +1,30 @@
 import { useEffect, useState } from "react";
-import { FetcherInit, UseDELETEOptions, UseGETOptions, UsePATCHOptions, UsePOSTOptions } from "./types";
+import {
+  ErrResponse,
+  FetcherInit,
+  MakeRequestOptions,
+  StatefulErrResponse,
+  UseDELETEOptions,
+  UseGETOptions,
+  UseOptions,
+  UsePATCHOptions,
+  UsePOSTOptions,
+} from "./types";
 
-type ResponseError = { status: number; fetchResponse: Response } | null;
+type ResponseError = ErrResponse | null;
+type StatefulResponseError<T = any> = StatefulErrResponse<T> | null;
 
 class Fetcher {
   baseUrl: string;
   headers?: () => { [key: string]: string };
+
+  defaultRequestOps: MakeRequestOptions = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: null,
+  };
 
   constructor(baseUrl: string, headers?: () => { [key: string]: string }) {
     this.baseUrl = baseUrl;
@@ -16,9 +35,108 @@ class Fetcher {
     });
   }
 
+  async request<T>(url: string, opts = this.defaultRequestOps) {
+    let data: T | null = null;
+    let error: StatefulResponseError = null;
+
+    let res: Response;
+    let resData: any;
+
+    try {
+      res = await fetch(this.baseUrl + url, {
+        headers: { ...this.headers?.(), ...opts?.headers },
+        method: opts?.method,
+        body: JSON.stringify(opts?.body),
+      });
+    } catch (err) {
+      console.error(err);
+      error = { status: 0, fetchResponse: null, data: null };
+      return { data, error };
+    }
+
+    try {
+      resData = await res.json();
+    } catch (err) {
+      resData = (await res.text()) as any;
+    }
+
+    if (res.ok) {
+      data = resData as T;
+    } else {
+      error = { status: res.status, fetchResponse: res, data: resData };
+    }
+
+    return { data, error };
+  }
+
+  use<T>(
+    url: string,
+    opts: UseOptions<T> = {
+      method: "GET",
+    }
+  ) {
+    const [data, setData] = useState<T | null>(null);
+    const [error, setError] = useState<StatefulResponseError>(null);
+    const [isLoading, setLoading] = useState(true);
+
+    const query = async () => {
+      setLoading(true);
+      opts?.onLoadingStart?.();
+
+      const { data, error } = await this.request<T>(url, {
+        body: opts?.body,
+        headers: opts?.headers,
+        method: "GET",
+      });
+
+      setLoading(false);
+      opts?.onLoadingEnd?.();
+
+      if (error) {
+        setError(error);
+        opts?.onError?.({ status: error.status, fetchResponse: error.fetchResponse, data });
+      } else if (data) {
+        setData(data);
+        opts?.onSuccess?.(data);
+      } else console.log("No data or error returned from request!");
+
+      return { data, error };
+    };
+
+    const mutate = async () => {
+      setLoading(true);
+      opts?.onLoadingStart?.();
+
+      const { data, error } = await this.request<T>(url, {
+        body: opts?.body,
+        headers: opts?.headers,
+        method: opts?.method || "POST",
+      });
+
+      setLoading(false);
+      opts?.onLoadingEnd?.();
+
+      if (error) {
+        setError(error);
+        opts?.onError?.({ status: error.status, fetchResponse: error.fetchResponse, data });
+      } else if (data) {
+        setData(data);
+        opts?.onSuccess?.(data);
+      } else console.log("No data or error returned from request!");
+
+      return { data, error };
+    };
+
+    useEffect(() => {
+      if (opts.method === "GET") query();
+    }, []);
+
+    return { data, error, query, mutate, isLoading, isError: !!error };
+  }
+
   useGET<T>(url: string, opts?: UseGETOptions<T>) {
     const [data, setData] = useState<T | null>(null);
-    const [isError, setError] = useState<{ status: number; fetchResponse: Response } | null>(null);
+    const [isError, setError] = useState<ResponseError>(null);
     const [isLoading, setLoading] = useState(true);
 
     const fetchData = async () => {
@@ -63,7 +181,7 @@ class Fetcher {
 
   usePOST<T>(url: string, opts?: UsePOSTOptions<T>) {
     const [data, setData] = useState<T | null>(null);
-    const [isError, setError] = useState<{ status: number; fetchResponse: Response } | null>(null);
+    const [isError, setError] = useState<ResponseError>(null);
     const [isLoading, setLoading] = useState(false);
 
     const postData = async (body: any) => {
@@ -106,7 +224,7 @@ class Fetcher {
 
   useDELETE<T>(opts?: UseDELETEOptions<T>) {
     const [data, setData] = useState<T | null>(null);
-    const [isError, setError] = useState<{ status: number; fetchResponse: Response } | null>(null);
+    const [isError, setError] = useState<ResponseError>(null);
     const [isLoading, setLoading] = useState(false);
 
     const deleteData = async (url: string) => {
@@ -148,7 +266,7 @@ class Fetcher {
 
   usePATCH<T>(opts?: UsePATCHOptions<T>) {
     const [data, setData] = useState<T | null>(null);
-    const [isError, setError] = useState<{ status: number; fetchResponse: Response } | null>(null);
+    const [isError, setError] = useState<ResponseError>(null);
     const [isLoading, setLoading] = useState(false);
 
     const patchData = async (url: string, body: any) => {

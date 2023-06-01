@@ -54,10 +54,12 @@ class Fetcher {
       return { data, error };
     }
 
+    const textRes = await res.text();
+
     try {
-      resData = await res.json();
+      resData = textRes ? JSON.parse(textRes) : null;
     } catch (err) {
-      resData = (await res.text()) as any;
+      resData = textRes;
     }
 
     if (res.ok) {

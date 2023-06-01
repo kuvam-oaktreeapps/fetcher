@@ -46,7 +46,7 @@ class Fetcher {
       res = await fetch(this.baseUrl + url, {
         headers: { ...this.headers?.(), ...opts?.headers },
         method: opts?.method,
-        body: JSON.stringify(opts?.body),
+        body: opts?.body && opts?.method !== "GET" ? JSON.stringify(opts?.body) : undefined,
       });
     } catch (err) {
       console.error(err);

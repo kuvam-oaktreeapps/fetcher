@@ -81,13 +81,19 @@ declare class Fetcher {
         data: T | null;
         error: StatefulResponseError<any>;
     }>;
-    use<T>(url: string, opts?: UseOptions<T>): {
+    useQuery<T>(url: string, opts: UseOptions<T>): {
         data: T | null;
         error: StatefulResponseError<any>;
-        query: () => Promise<{
+        refetch: () => Promise<{
             data: T | null;
             error: StatefulResponseError<any>;
         }>;
+        isLoading: boolean;
+        isError: boolean;
+    };
+    useMutation<T>(url: string, opts: UseOptions<T>): {
+        data: T | null;
+        error: StatefulResponseError<any>;
         mutate: (body: any) => Promise<{
             data: T | null;
             error: StatefulResponseError<any>;

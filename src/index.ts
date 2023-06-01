@@ -72,12 +72,7 @@ class Fetcher {
     return { data, error };
   }
 
-  use<T>(
-    url: string,
-    opts: UseOptions<T> = {
-      method: "GET",
-    }
-  ) {
+  useQuery<T>(url: string, opts: UseOptions<T>) {
     const [data, setData] = useState<T | null>(null);
     const [error, setError] = useState<StatefulResponseError>(null);
     const [isLoading, setLoading] = useState(true);
@@ -88,7 +83,7 @@ class Fetcher {
 
       const { data, error } = await this.request<T>(url, {
         headers: opts?.headers,
-        method: "GET",
+        method: opts?.method || "GET",
       });
 
       setLoading(false);
@@ -104,6 +99,18 @@ class Fetcher {
 
       return { data, error };
     };
+
+    useEffect(() => {
+      query();
+    }, []);
+
+    return { data, error, refetch: query, isLoading, isError: !!error };
+  }
+
+  useMutation<T>(url: string, opts: UseOptions<T>) {
+    const [data, setData] = useState<T | null>(null);
+    const [error, setError] = useState<StatefulResponseError>(null);
+    const [isLoading, setLoading] = useState(true);
 
     const mutate = async (body: any) => {
       setLoading(true);
@@ -129,11 +136,7 @@ class Fetcher {
       return { data, error };
     };
 
-    useEffect(() => {
-      if (opts.method === "GET") query();
-    }, []);
-
-    return { data, error, query, mutate, isLoading, isError: !!error };
+    return { data, error, mutate, isLoading, isError: !!error };
   }
 
   useGET<T>(url: string, opts?: UseGETOptions<T>) {

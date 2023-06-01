@@ -10,6 +10,7 @@ import {
   UsePATCHOptions,
   UsePOSTOptions,
 } from "./types";
+import { getCleanUrl } from "./utils/urls";
 
 type ResponseError = ErrResponse | null;
 type StatefulResponseError<T = any> = StatefulErrResponse<T> | null;
@@ -23,11 +24,11 @@ class Fetcher {
     headers: {
       "Content-Type": "application/json",
     },
-    body: null,
+    body: undefined,
   };
 
   constructor(baseUrl: string, headers?: () => { [key: string]: string }) {
-    this.baseUrl = baseUrl;
+    this.baseUrl = getCleanUrl(baseUrl);
     this.headers = () => ({
       "Content-Type": "application/json",
       Accept: "application/json",
@@ -86,7 +87,6 @@ class Fetcher {
       opts?.onLoadingStart?.();
 
       const { data, error } = await this.request<T>(url, {
-        body: opts?.body,
         headers: opts?.headers,
         method: "GET",
       });
@@ -105,12 +105,12 @@ class Fetcher {
       return { data, error };
     };
 
-    const mutate = async () => {
+    const mutate = async (body: any) => {
       setLoading(true);
       opts?.onLoadingStart?.();
 
       const { data, error } = await this.request<T>(url, {
-        body: opts?.body,
+        body,
         headers: opts?.headers,
         method: opts?.method || "POST",
       });

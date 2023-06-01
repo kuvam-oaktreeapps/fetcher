@@ -9,7 +9,7 @@
     "email": "kuvam@oaktreeapps.com"
   },
   "description": "A type-safe simple and lightweight fetch wrapper for React.js applications with convenient functions for crafting & handling a request.",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "main": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "license": "MIT",

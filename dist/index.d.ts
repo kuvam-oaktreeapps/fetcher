@@ -21,7 +21,6 @@ type UseOptions<R = any> = {
         [key: string]: string;
     };
     method?: Method;
-    body?: any;
 };
 type UseGETOptions<T = any> = {
     onSuccess?: (data: T) => void;
@@ -64,7 +63,7 @@ type MakeRequestOptions = {
         [key: string]: string;
     };
     method: Method;
-    body: any;
+    body?: any;
 };
 
 type ResponseError = ErrResponse | null;
@@ -89,7 +88,7 @@ declare class Fetcher {
             data: T | null;
             error: StatefulResponseError<any>;
         }>;
-        mutate: () => Promise<{
+        mutate: (body: any) => Promise<{
             data: T | null;
             error: StatefulResponseError<any>;
         }>;

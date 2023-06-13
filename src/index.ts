@@ -44,13 +44,11 @@ class Fetcher {
     let res: Response;
     let resData: any;
 
-    let requestUrl = new URL(this.baseUrl + url)
+    let requestUrl = this.baseUrl + url
 
     if (Object.keys(opts.params || {}).length > 0) {
-      requestUrl.search = new URLSearchParams(opts.params).toString()
+      requestUrl += new URLSearchParams(opts.params).toString()
     }
-
-    Array.from(requestUrl.searchParams)
 
     try {
       res = await fetch(requestUrl, {

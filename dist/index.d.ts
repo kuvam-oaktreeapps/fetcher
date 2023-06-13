@@ -21,6 +21,9 @@ type UseOptions<R = any> = {
         [key: string]: string;
     };
     method?: Method;
+    params?: {
+        [key: string]: string;
+    };
 };
 type UseGETOptions<T = any> = {
     onSuccess?: (data: T) => void;
@@ -64,6 +67,9 @@ type MakeRequestOptions = {
     };
     method: Method;
     body?: any;
+    params?: {
+        [key: string]: string;
+    };
 };
 
 type ResponseError = ErrResponse | null;
@@ -84,7 +90,9 @@ declare class Fetcher {
     useQuery<T>(url: string, opts: UseOptions<T>): {
         data: T | null;
         error: StatefulResponseError<any>;
-        refetch: () => Promise<{
+        refetch: (params?: {
+            [key: string]: string;
+        }) => Promise<{
             data: T | null;
             error: StatefulResponseError<any>;
         }>;
@@ -94,7 +102,9 @@ declare class Fetcher {
     useMutation<T>(url: string, opts: UseOptions<T>): {
         data: T | null;
         error: StatefulResponseError<any>;
-        mutate: (body: any) => Promise<{
+        mutate: (body: any, params?: {
+            [key: string]: string;
+        } | undefined) => Promise<{
             data: T | null;
             error: StatefulResponseError<any>;
         }>;

@@ -25,6 +25,7 @@ class Fetcher {
       "Content-Type": "application/json",
     },
     body: undefined,
+    params: {}
   };
 
   constructor(baseUrl: string, headers?: () => { [key: string]: string }) {
@@ -43,8 +44,16 @@ class Fetcher {
     let res: Response;
     let resData: any;
 
+    let requestUrl = new URL(this.baseUrl + url)
+
+    if (Object.keys(opts.params || {}).length > 0) {
+      requestUrl.search = new URLSearchParams(opts.params).toString()
+    }
+
+    Array.from(requestUrl.searchParams)
+
     try {
-      res = await fetch(this.baseUrl + url, {
+      res = await fetch(requestUrl, {
         headers: { ...this.headers?.(), ...opts?.headers },
         method: opts?.method,
         body: opts?.body && opts?.method !== "GET" ? JSON.stringify(opts?.body) : undefined,
@@ -77,13 +86,14 @@ class Fetcher {
     const [error, setError] = useState<StatefulResponseError>(null);
     const [isLoading, setLoading] = useState(true);
 
-    const query = async () => {
+    const query = async (params: { [key: string]: string } = {}) => {
       setLoading(true);
       opts?.onLoadingStart?.();
 
       const { data, error } = await this.request<T>(url, {
         headers: opts?.headers,
         method: opts?.method || "GET",
+        params,
       });
 
       setLoading(false);
@@ -112,7 +122,7 @@ class Fetcher {
     const [error, setError] = useState<StatefulResponseError>(null);
     const [isLoading, setLoading] = useState(true);
 
-    const mutate = async (body: any) => {
+    const mutate = async (body: any, params?: { [key: string]: string }) => {
       setLoading(true);
       opts?.onLoadingStart?.();
 
@@ -120,6 +130,7 @@ class Fetcher {
         body,
         headers: opts?.headers,
         method: opts?.method || "POST",
+        params
       });
 
       setLoading(false);

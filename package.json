@@ -6,15 +6,16 @@
   },
   "author": {
     "name": "OaktreeApps",
-    "email": "kuvam@oaktreeapps.com"
+    "email": "hello@oaktreeapps.com"
   },
   "description": "A type-safe simple and lightweight fetch wrapper for React.js applications with convenient functions for crafting & handling a request.",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "main": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "license": "MIT",
   "scripts": {
-    "build": "npx tsup src/index.ts --minify --format esm --clean --dts"
+    "build": "npx tsup src/index.ts --minify --format esm --clean --dts",
+    "watch": "yarn build --watch"
   },
   "devDependencies": {
     "@types/react": "^18.2.6",

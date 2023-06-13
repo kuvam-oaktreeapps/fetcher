@@ -81,7 +81,7 @@ class Fetcher {
     return { data, error };
   }
 
-  useQuery<T>(url: string, opts: UseOptions<T>) {
+  useQuery<T>(url: string, opts?: UseOptions<T>) {
     const [data, setData] = useState<T | null>(null);
     const [error, setError] = useState<StatefulResponseError>(null);
     const [isLoading, setLoading] = useState(true);
@@ -117,7 +117,7 @@ class Fetcher {
     return { data, error, refetch: query, isLoading, isError: !!error };
   }
 
-  useMutation<T>(url: string, opts: UseOptions<T>) {
+  useMutation<T>(url: string, opts?: UseOptions<T>) {
     const [data, setData] = useState<T | null>(null);
     const [error, setError] = useState<StatefulResponseError>(null);
     const [isLoading, setLoading] = useState(true);

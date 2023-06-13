@@ -91,7 +91,7 @@ declare class Fetcher {
         data: T | null;
         error: StatefulResponseError<any>;
         refetch: (params?: {
-            [key: string]: string;
+            [key: string]: any;
         }) => Promise<{
             data: T | null;
             error: StatefulResponseError<any>;

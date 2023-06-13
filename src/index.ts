@@ -86,7 +86,7 @@ class Fetcher {
     const [error, setError] = useState<StatefulResponseError>(null);
     const [isLoading, setLoading] = useState(true);
 
-    const query = async (params: { [key: string]: string } = {}) => {
+    const query = async (params: { [key: string]: any } = {}) => {
       setLoading(true);
       opts?.onLoadingStart?.();
 

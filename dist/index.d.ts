@@ -22,7 +22,7 @@ type UseOptions<R = any> = {
     };
     method?: Method;
     params?: {
-        [key: string]: string;
+        [key: string]: any;
     };
 };
 type UseGETOptions<T = any> = {
@@ -68,7 +68,7 @@ type MakeRequestOptions = {
     method: Method;
     body?: any;
     params?: {
-        [key: string]: string;
+        [key: string]: any;
     };
 };
 

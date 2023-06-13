@@ -21,7 +21,7 @@ export type UseOptions<R = any> = {
   onLoadingEnd?: () => void;
   headers?: { [key: string]: string };
   method?: Method;
-  params?: { [key: string]: string };
+  params?: { [key: string]: any };
 };
 
 export type UseGETOptions<T = any> = {
@@ -60,5 +60,5 @@ export type MakeRequestOptions = {
   headers?: { [key: string]: string };
   method: Method;
   body?: any;
-  params?: { [key: string]: string };
+  params?: { [key: string]: any };
 };

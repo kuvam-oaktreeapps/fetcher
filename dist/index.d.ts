@@ -4,16 +4,14 @@ type FetcherInit = {
         [key: string]: string;
     };
 };
-interface ErrResponse {
+interface StatefulErrResponse<T = any> {
     status: number;
     fetchResponse: Response | null;
-}
-interface StatefulErrResponse<T = any> extends ErrResponse {
     data: T;
 }
 type Method = "POST" | "GET" | "DELETE" | "PATCH" | "PUT";
-type UseOptions<R = any> = {
-    onSuccess?: (data: R) => void;
+type UseOptions<T = any> = {
+    onSuccess?: (data: T) => void;
     onError?: ({ status, data, fetchResponse }: StatefulErrResponse) => void;
     onLoadingStart?: () => void;
     onLoadingEnd?: () => void;
@@ -23,42 +21,6 @@ type UseOptions<R = any> = {
     method?: Method;
     params?: {
         [key: string]: any;
-    };
-};
-type UseGETOptions<T = any> = {
-    onSuccess?: (data: T) => void;
-    onError?: ({ status, fetchResponse }: ErrResponse) => void;
-    onLoadingStart?: () => void;
-    onLoadingEnd?: () => void;
-    headers?: {
-        [key: string]: string;
-    };
-};
-type UsePOSTOptions<T = any> = {
-    onSuccess?: (data: T) => void;
-    onError?: ({ status, fetchResponse }: ErrResponse) => void;
-    onLoadingStart?: () => void;
-    onLoadingEnd?: () => void;
-    headers?: {
-        [key: string]: string;
-    };
-};
-type UseDELETEOptions<T = any> = {
-    onSuccess?: (data: T) => void;
-    onError?: ({ status, fetchResponse }: ErrResponse) => void;
-    onLoadingStart?: () => void;
-    onLoadingEnd?: () => void;
-    headers?: {
-        [key: string]: string;
-    };
-};
-type UsePATCHOptions<T = any> = {
-    onSuccess?: (data: T) => void;
-    onError?: ({ status, fetchResponse }: ErrResponse) => void;
-    onLoadingStart?: () => void;
-    onLoadingEnd?: () => void;
-    headers?: {
-        [key: string]: string;
     };
 };
 type MakeRequestOptions = {
@@ -72,7 +34,6 @@ type MakeRequestOptions = {
     };
 };
 
-type ResponseError = ErrResponse | null;
 type StatefulResponseError<T = any> = StatefulErrResponse<T> | null;
 declare class Fetcher {
     baseUrl: string;
@@ -110,42 +71,6 @@ declare class Fetcher {
         }>;
         isLoading: boolean;
         isError: boolean;
-    };
-    useGET<T>(url: string, opts?: UseGETOptions<T>): {
-        data: T | null;
-        isError: ResponseError;
-        isLoading: boolean;
-        refetchData: () => Promise<{
-            data: T | null;
-            error: ResponseError;
-        }>;
-    };
-    usePOST<T>(url: string, opts?: UsePOSTOptions<T>): {
-        postData: (body: any) => Promise<{
-            data: T | null;
-            error: ResponseError;
-        }>;
-        isError: ResponseError;
-        isLoading: boolean;
-        data: T | null;
-    };
-    useDELETE<T>(opts?: UseDELETEOptions<T>): {
-        isError: ResponseError;
-        isLoading: boolean;
-        deleteData: (url: string) => Promise<{
-            data: T | null;
-            error: ResponseError;
-        }>;
-        data: T | null;
-    };
-    usePATCH<T>(opts?: UsePATCHOptions<T>): {
-        patchData: (url: string, body: any) => Promise<{
-            data: T | null;
-            error: ResponseError;
-        }>;
-        isError: ResponseError;
-        isLoading: boolean;
-        data: T | null;
     };
 }
 declare const createFetcher: (opts: FetcherInit) => Fetcher;

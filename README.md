@@ -198,8 +198,4 @@ createFetcher(opts: FetcherInit): Fetcher
   - `baseUrl` (string): The base URL for the API.
   - `headers` (optional function): A function that returns an object containing headers to be included in the requests.
 
-Returns a new instance of the `Fetcher` class.
-
----
-
-Please note that the above API reference assumes the existence of additional types and utility functions (`types.ts` and `utils/urls.ts`) that are not provided in the code snippet you shared. You may need to include those parts separately.
+Returns a new instance of the `Fetcher`.

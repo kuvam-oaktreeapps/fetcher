@@ -27,7 +27,7 @@ type MakeRequestOptions = {
     headers?: {
         [key: string]: string;
     };
-    method: Method;
+    method?: Method;
     body?: any;
     params?: {
         [key: string]: any;
@@ -40,7 +40,6 @@ declare class Fetcher {
     headers?: () => {
         [key: string]: string;
     };
-    defaultRequestOps: MakeRequestOptions;
     constructor(baseUrl: string, headers?: () => {
         [key: string]: string;
     });

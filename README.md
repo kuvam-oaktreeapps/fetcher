@@ -1,17 +1,19 @@
-# usefetcher
+# Simple React Hooks Fetcher Library
 
 A type-safe simple and lightweight fetch wrapper for React.js applications with convenient functions for crafting & handling a request.
 
 ## Installation
 
 ```bash
-npm install @dazeus/usefetcher
+npm install @oaktree/fetcher
 ```
 
 ## Quick Start
 
 ```javascript
 // fetcher.js
+import { createFetcher } from "@oaktree/fetcher";
+
 const fetcher = createFetcher({
   baseUrl: "https://myapi.com/v3/",
   headers: () => ({

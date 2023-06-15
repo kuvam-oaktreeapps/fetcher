@@ -1,26 +1,12 @@
 import { useEffect, useState } from "react";
-import {
-  FetcherInit,
-  MakeRequestOptions,
-  StatefulErrResponse,
-  UseOptions,
-} from "./types";
-import { getCleanUrl } from "./utils/urls";
+import { FetcherInit, MakeRequestOptions, StatefulErrResponse, UseOptions } from "./types";
+import { getCleanUrl, getSlashedUrl } from "./utils/urls";
 
 type StatefulResponseError<T = any> = StatefulErrResponse<T> | null;
 
 class Fetcher {
   baseUrl: string;
   headers?: () => { [key: string]: string };
-
-  defaultRequestOps: MakeRequestOptions = {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: undefined,
-    params: {}
-  };
 
   constructor(baseUrl: string, headers?: () => { [key: string]: string }) {
     this.baseUrl = getCleanUrl(baseUrl);
@@ -31,25 +17,32 @@ class Fetcher {
     });
   }
 
-  async request<T>(url: string, opts = this.defaultRequestOps) {
+  async request<T>(url: string, opts: MakeRequestOptions = {}) {
+    const requestInfo: MakeRequestOptions = {
+      method: opts.method || "GET",
+      body: JSON.stringify(opts.body || {}),
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        ...this.headers?.(),
+        ...opts?.headers,
+      },
+    };
+
     let data: T | null = null;
     let error: StatefulResponseError = null;
 
     let res: Response;
     let resData: any;
 
-    let requestUrl = this.baseUrl + url
+    let requestUrl = this.baseUrl + url;
 
     if (Object.keys(opts.params || {}).length > 0) {
-      requestUrl += new URLSearchParams(opts.params).toString()
+      requestUrl += new URLSearchParams(opts.params).toString();
     }
 
     try {
-      res = await fetch(requestUrl, {
-        headers: { ...this.headers?.(), ...opts?.headers },
-        method: opts?.method,
-        body: opts?.body && opts?.method !== "GET" ? JSON.stringify(opts?.body) : undefined,
-      });
+      res = await fetch(requestUrl, requestInfo);
     } catch (err) {
       console.error(err);
       error = { status: 0, fetchResponse: null, data: null };
@@ -82,9 +75,9 @@ class Fetcher {
       setLoading(true);
       opts?.onLoadingStart?.();
 
-      const { data, error } = await this.request<T>(url, {
+      const { data, error } = await this.request<T>(getSlashedUrl(url), {
         headers: opts?.headers,
-        method: opts?.method || "GET",
+        method: opts?.method,
         params,
       });
 
@@ -103,7 +96,7 @@ class Fetcher {
     };
 
     useEffect(() => {
-      query();
+      query(opts?.params);
     }, []);
 
     return { data, error, refetch: query, isLoading, isError: !!error };
@@ -118,11 +111,11 @@ class Fetcher {
       setLoading(true);
       opts?.onLoadingStart?.();
 
-      const { data, error } = await this.request<T>(url, {
+      const { data, error } = await this.request<T>(getSlashedUrl(url), {
         body,
         headers: opts?.headers,
         method: opts?.method || "POST",
-        params
+        params,
       });
 
       setLoading(false);

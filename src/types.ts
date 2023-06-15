@@ -23,7 +23,7 @@ export type UseOptions<T = any> = {
 
 export type MakeRequestOptions = {
   headers?: { [key: string]: string };
-  method: Method;
+  method?: Method;
   body?: any;
   params?: { [key: string]: any };
 };

@@ -28,7 +28,7 @@ type MakeRequestOptions = {
   params?: { [key: string]: any };
 };
 
-declare type StatefulResponseError<T = any> = null | StatefulErrResponse<T>;
+type StatefulResponseError<T = any> = null | StatefulErrResponse<T>;
 declare class Fetcher {
     baseUrl: string;
     headers?: () => {

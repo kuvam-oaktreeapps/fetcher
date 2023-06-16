@@ -20,7 +20,7 @@ class Fetcher {
   async request<T>(url: string, opts: MakeRequestOptions = {}) {
     const requestInfo: MakeRequestOptions = {
       method: opts.method || "GET",
-      body: JSON.stringify(opts.body || {}),
+      body: JSON.stringify(opts.body),
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",

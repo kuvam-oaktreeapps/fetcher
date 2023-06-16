@@ -34,7 +34,11 @@ type MakeRequestOptions = {
     };
 };
 
-type StatefulResponseError<T = any> = StatefulErrResponse<T> | null;
+type StatefulResponseError<T = any> = null | {
+    status: number;
+    fetchResponse: Response | null;
+    data: T;
+};
 declare class Fetcher {
     baseUrl: string;
     headers?: () => {

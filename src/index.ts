@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react";
-import { FetcherInit, MakeRequestOptions, UseOptions } from "./types";
+import type { FetcherInit, MakeRequestOptions, StatefulErrResponse, UseOptions } from "./types";
 import { getCleanUrl, getSlashedUrl } from "./utils/urls";
 
-type StatefulResponseError<T = any> = null | {
-  status: number;
-  fetchResponse: Response | null;
-  data: T;
-};
+type StatefulResponseError<T = any> = null | StatefulErrResponse<T>;
 
 class Fetcher {
   baseUrl: string;

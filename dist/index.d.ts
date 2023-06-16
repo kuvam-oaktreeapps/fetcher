@@ -1,44 +1,34 @@
 type FetcherInit = {
-    baseUrl?: string;
-    headers?: () => {
-        [key: string]: string;
-    };
-};
-interface StatefulErrResponse<T = any> {
-    status: number;
-    fetchResponse: Response | null;
-    data: T;
-}
-type Method = "POST" | "GET" | "DELETE" | "PATCH" | "PUT";
-type UseOptions<T = any> = {
-    onSuccess?: (data: T) => void;
-    onError?: ({ status, data, fetchResponse }: StatefulErrResponse) => void;
-    onLoadingStart?: () => void;
-    onLoadingEnd?: () => void;
-    headers?: {
-        [key: string]: string;
-    };
-    method?: Method;
-    params?: {
-        [key: string]: any;
-    };
-};
-type MakeRequestOptions = {
-    headers?: {
-        [key: string]: string;
-    };
-    method?: Method;
-    body?: any;
-    params?: {
-        [key: string]: any;
-    };
+  baseUrl?: string;
+  headers?: () => { [key: string]: string };
 };
 
-type StatefulResponseError<T = any> = null | {
-    status: number;
-    fetchResponse: Response | null;
-    data: T;
+interface StatefulErrResponse<T = any> {
+  status: number;
+  fetchResponse: Response | null;
+  data: T;
+}
+
+type Method = "POST" | "GET" | "DELETE" | "PATCH" | "PUT";
+
+type UseOptions<T = any> = {
+  onSuccess?: (data: T) => void;
+  onError?: ({ status, data, fetchResponse }: StatefulErrResponse) => void;
+  onLoadingStart?: () => void;
+  onLoadingEnd?: () => void;
+  headers?: { [key: string]: string };
+  method?: Method;
+  params?: { [key: string]: any };
 };
+
+type MakeRequestOptions = {
+  headers?: { [key: string]: string };
+  method?: Method;
+  body?: any;
+  params?: { [key: string]: any };
+};
+
+declare type StatefulResponseError<T = any> = null | StatefulErrResponse<T>;
 declare class Fetcher {
     baseUrl: string;
     headers?: () => {

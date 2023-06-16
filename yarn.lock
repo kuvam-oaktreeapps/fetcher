@@ -682,13 +682,6 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@oaktree/react-fetcher@^1.0.5":
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/@oaktree/react-fetcher/-/react-fetcher-1.0.5.tgz#8cc3e4ee8331806bb625a6f50437a222ba3df5b3"
-  integrity sha512-9FBy7bgckXfco5FCWxYEGsRlVm3f8GiTgTG+BJvUh2UGH+wPDVYdoDlygVUeSWOHpYlZZgvfoXn2qRZrtoPOIQ==
-  dependencies:
-    react "^18.2.0"
-
 "@sinclair/typebox@^0.25.16":
   version "0.25.24"
   resolved "https://registry.yarnpkg.com/@sinclair/typebox/-/typebox-0.25.24.tgz#8c7688559979f7079aacaf31aa881c3aa410b718"

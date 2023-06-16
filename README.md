@@ -5,14 +5,14 @@ A type-safe simple and lightweight fetch wrapper for React.js applications with 
 ## Installation
 
 ```bash
-npm install @oaktree/fetcher
+npm install @oaktree/react-fetcher
 ```
 
 ## Quick Start
 
 ```javascript
 // fetcher.js
-import { createFetcher } from "@oaktree/fetcher";
+import { createFetcher } from "@oaktree/react-fetcher";
 
 const fetcher = createFetcher({
   baseUrl: "https://myapi.com/v3/",

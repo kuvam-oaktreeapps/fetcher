@@ -1,5 +1,5 @@
 export type FetcherInit = {
-  baseUrl: string;
+  baseUrl?: string;
   headers?: () => { [key: string]: string };
 };
 

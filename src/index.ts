@@ -8,8 +8,8 @@ class Fetcher {
   baseUrl: string;
   headers?: () => { [key: string]: string };
 
-  constructor(baseUrl: string, headers?: () => { [key: string]: string }) {
-    this.baseUrl = getCleanUrl(baseUrl);
+  constructor(baseUrl?: string, headers?: () => { [key: string]: string }) {
+    this.baseUrl = getCleanUrl(baseUrl || "/");
     this.headers = () => ({
       "Content-Type": "application/json",
       Accept: "application/json",
@@ -136,6 +136,6 @@ class Fetcher {
   }
 }
 
-export const createFetcher = (opts: FetcherInit) => {
-  return new Fetcher(opts.baseUrl, opts.headers);
+export const createFetcher = (opts?: FetcherInit) => {
+  return new Fetcher(opts?.baseUrl, opts?.headers);
 };

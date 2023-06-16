@@ -1,5 +1,5 @@
 type FetcherInit = {
-    baseUrl: string;
+    baseUrl?: string;
     headers?: () => {
         [key: string]: string;
     };
@@ -40,7 +40,7 @@ declare class Fetcher {
     headers?: () => {
         [key: string]: string;
     };
-    constructor(baseUrl: string, headers?: () => {
+    constructor(baseUrl?: string, headers?: () => {
         [key: string]: string;
     });
     request<T>(url: string, opts?: MakeRequestOptions): Promise<{
@@ -72,6 +72,6 @@ declare class Fetcher {
         isError: boolean;
     };
 }
-declare const createFetcher: (opts: FetcherInit) => Fetcher;
+declare const createFetcher: (opts?: FetcherInit) => Fetcher;
 
 export { createFetcher };

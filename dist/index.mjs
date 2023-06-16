@@ -1,1 +1,102 @@
-import{useEffect as O,useState as g}from"react";var q=r=>r.replace(/\/$/g,""),T=r=>r.startsWith("/")?r:`/${r}`;var E=class{constructor(s,e){this.baseUrl=q(s||"/"),this.headers=()=>({"Content-Type":"application/json",Accept:"application/json",...e==null?void 0:e()})}async request(s,e={}){var f;let y={method:e.method||"GET",body:JSON.stringify(e.body||{}),headers:{"Content-Type":"application/json",Accept:"application/json",...(f=this.headers)==null?void 0:f.call(this),...e==null?void 0:e.headers}},d=null,a=null,i,l,u=this.baseUrl+s;Object.keys(e.params||{}).length>0&&(u+=new URLSearchParams(e.params).toString());try{i=await fetch(u,y)}catch(t){return console.error(t),a={status:0,fetchResponse:null,data:null},{data:d,error:a}}let h=await i.text();try{l=h?JSON.parse(h):null}catch(t){l=h}return i.ok?d=l:a={status:i.status,fetchResponse:i,data:l},{data:d,error:a}}useQuery(s,e){let[y,d]=g(null),[a,i]=g(null),[l,u]=g(!0),h=async(f={})=>{var c,m,R,S;u(!0),(c=e==null?void 0:e.onLoadingStart)==null||c.call(e);let{data:t,error:n}=await this.request(T(s),{headers:e==null?void 0:e.headers,method:e==null?void 0:e.method,params:f});return u(!1),(m=e==null?void 0:e.onLoadingEnd)==null||m.call(e),n?(i(n),(R=e==null?void 0:e.onError)==null||R.call(e,{status:n.status,fetchResponse:n.fetchResponse,data:t})):t?(d(t),(S=e==null?void 0:e.onSuccess)==null||S.call(e,t)):console.log("No data or error returned from request!"),{data:t,error:n}};return O(()=>{h(e==null?void 0:e.params)},[]),{data:y,error:a,refetch:h,isLoading:l,isError:!!a}}useMutation(s,e){let[y,d]=g(null),[a,i]=g(null),[l,u]=g(!0);return{data:y,error:a,mutate:async(f,t)=>{var m,R,S,U;u(!0),(m=e==null?void 0:e.onLoadingStart)==null||m.call(e);let{data:n,error:c}=await this.request(T(s),{body:f,headers:e==null?void 0:e.headers,method:(e==null?void 0:e.method)||"POST",params:t});return u(!1),(R=e==null?void 0:e.onLoadingEnd)==null||R.call(e),c?(i(c),(S=e==null?void 0:e.onError)==null||S.call(e,{status:c.status,fetchResponse:c.fetchResponse,data:n})):n?(d(n),(U=e==null?void 0:e.onSuccess)==null||U.call(e,n)):console.log("No data or error returned from request!"),{data:n,error:c}},isLoading:l,isError:!!a}}},w=r=>new E(r==null?void 0:r.baseUrl,r==null?void 0:r.headers);export{w as createFetcher};
+import { useEffect as R, useState as h } from "react";
+var m = (s) => s.replace(/\/$/g, ""),
+  p = (s) => (s.startsWith("/") ? s : `/${s}`);
+var y = class {
+    baseUrl;
+    headers;
+    constructor(i, e) {
+      (this.baseUrl = m(i || "/")),
+        (this.headers = () => ({ "Content-Type": "application/json", Accept: "application/json", ...e?.() }));
+    }
+    async request(i, e = {}) {
+      let f = {
+          method: e.method || "GET",
+          body: JSON.stringify(e.body || {}),
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            ...this.headers?.(),
+            ...e?.headers,
+          },
+        },
+        l = null,
+        r = null,
+        n,
+        a,
+        o = this.baseUrl + i;
+      Object.keys(e.params || {}).length > 0 && (o += new URLSearchParams(e.params).toString());
+      try {
+        n = await fetch(o, f);
+      } catch (d) {
+        return console.error(d), (r = { status: 0, fetchResponse: null, data: null }), { data: l, error: r };
+      }
+      let u = await n.text();
+      try {
+        a = u ? JSON.parse(u) : null;
+      } catch {
+        a = u;
+      }
+      return n.ok ? (l = a) : (r = { status: n.status, fetchResponse: n, data: a }), { data: l, error: r };
+    }
+    useQuery(i, e) {
+      let [f, l] = h(null),
+        [r, n] = h(null),
+        [a, o] = h(!0),
+        u = async (d = {}) => {
+          o(!0), e?.onLoadingStart?.();
+          let { data: c, error: t } = await this.request(p(i), {
+            headers: e?.headers,
+            method: e?.method,
+            params: d,
+          });
+          return (
+            o(!1),
+            e?.onLoadingEnd?.(),
+            t
+              ? (n(t), e?.onError?.({ status: t.status, fetchResponse: t.fetchResponse, data: c }))
+              : c
+              ? (l(c), e?.onSuccess?.(c))
+              : console.log("No data or error returned from request!"),
+            { data: c, error: t }
+          );
+        };
+      return (
+        R(() => {
+          u(e?.params);
+        }, []),
+        { data: f, error: r, refetch: u, isLoading: a, isError: !!r }
+      );
+    }
+    useMutation(i, e) {
+      let [f, l] = h(null),
+        [r, n] = h(null),
+        [a, o] = h(!0);
+      return {
+        data: f,
+        error: r,
+        mutate: async (d, c) => {
+          o(!0), e?.onLoadingStart?.();
+          let { data: t, error: g } = await this.request(p(i), {
+            body: d,
+            headers: e?.headers,
+            method: e?.method || "POST",
+            params: c,
+          });
+          return (
+            o(!1),
+            e?.onLoadingEnd?.(),
+            g
+              ? (n(g), e?.onError?.({ status: g.status, fetchResponse: g.fetchResponse, data: t }))
+              : t
+              ? (l(t), e?.onSuccess?.(t))
+              : console.log("No data or error returned from request!"),
+            { data: t, error: g }
+          );
+        },
+        isLoading: a,
+        isError: !!r,
+      };
+    }
+  },
+  U = (s) => new y(s?.baseUrl, s?.headers);
+export { U as createFetcher };

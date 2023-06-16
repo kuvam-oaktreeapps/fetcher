@@ -1,5 +1,5 @@
 {
-  "name": "@oaktree/fetcher",
+  "name": "@oaktree/react-fetcher",
   "displayName": "Simple React Hooks Fetcher Library",
   "publishConfig": {
     "access": "public"

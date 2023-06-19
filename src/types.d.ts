@@ -3,6 +3,8 @@ export type FetcherInit = {
   headers?: () => { [key: string]: string };
 };
 
+export type Params = { pathname?: string; [key: string]: any };
+
 export interface StatefulErrResponse<T = any> {
   status: number;
   fetchResponse: Response | null;
@@ -18,12 +20,12 @@ export type UseOptions<T = any> = {
   onLoadingEnd?: () => void;
   headers?: { [key: string]: string };
   method?: Method;
-  params?: { [key: string]: any };
+  params?: Params;
 };
 
 export type MakeRequestOptions = {
   headers?: { [key: string]: string };
   method?: Method;
   body?: any;
-  params?: { [key: string]: any };
+  params?: Params;
 };

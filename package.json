@@ -18,7 +18,7 @@
     "email": "hello@oaktreeapps.com"
   },
   "description": "A type-safe simple and lightweight fetch wrapper for React.js applications with convenient functions for crafting & handling a request.",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "main": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "license": "MIT",
@@ -27,11 +27,7 @@
     "watch": "yarn build --watch"
   },
   "devDependencies": {
-    "@testing-library/react": "^14.0.0",
-    "@types/jest": "^29.5.2",
     "@types/react": "^18.2.6",
-    "jest": "^29.5.0",
-    "react-dom": "^18.2.0",
     "tsup": "^6.7.0",
     "typescript": "^5.0.4"
   },

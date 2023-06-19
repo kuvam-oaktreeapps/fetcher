@@ -3,6 +3,8 @@ type FetcherInit = {
   headers?: () => { [key: string]: string };
 };
 
+type Params = { pathname?: string; [key: string]: any };
+
 interface StatefulErrResponse<T = any> {
   status: number;
   fetchResponse: Response | null;
@@ -18,14 +20,14 @@ type UseOptions<T = any> = {
   onLoadingEnd?: () => void;
   headers?: { [key: string]: string };
   method?: Method;
-  params?: { [key: string]: any };
+  params?: Params;
 };
 
 type MakeRequestOptions = {
   headers?: { [key: string]: string };
   method?: Method;
   body?: any;
-  params?: { [key: string]: any };
+  params?: Params;
 };
 
 type StatefulResponseError<T = any> = null | StatefulErrResponse<T>;
@@ -44,9 +46,7 @@ declare class Fetcher {
     useQuery<T>(url: string, opts?: UseOptions<T>): {
         data: T | null;
         error: StatefulResponseError<any>;
-        refetch: (params?: {
-            [key: string]: any;
-        }) => Promise<{
+        refetch: (params?: Params) => Promise<{
             data: T | null;
             error: StatefulResponseError<any>;
         }>;
@@ -56,9 +56,7 @@ declare class Fetcher {
     useMutation<T>(url: string, opts?: UseOptions<T>): {
         data: T | null;
         error: StatefulResponseError<any>;
-        mutate: (body: any, params?: {
-            [key: string]: string;
-        } | undefined) => Promise<{
+        mutate: (body: any, params?: Params) => Promise<{
             data: T | null;
             error: StatefulResponseError<any>;
         }>;

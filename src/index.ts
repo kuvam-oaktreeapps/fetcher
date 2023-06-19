@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import type { FetcherInit, MakeRequestOptions, StatefulErrResponse, UseOptions } from "./types";
-import { getCleanUrl, getSlashedUrl } from "./utils/urls";
+import type { FetcherInit, MakeRequestOptions, Params, StatefulErrResponse, UseOptions } from "./types";
+import { getCleanUrl, joinableUrl } from "./utils/urls";
 
 type StatefulResponseError<T = any> = null | StatefulErrResponse<T>;
 
@@ -35,10 +35,15 @@ class Fetcher {
     let res: Response;
     let resData: any;
 
-    let requestUrl = this.baseUrl + url;
+    let requestUrl = this.baseUrl + joinableUrl(url);
 
     if (Object.keys(opts.params || {}).length > 0) {
-      requestUrl += new URLSearchParams(opts.params).toString();
+      const { pathname, ...urlParams } = opts.params || {};
+
+      requestUrl +=
+        (opts.params?.pathname ? joinableUrl(opts.params.pathname) : "") +
+        "?" +
+        new URLSearchParams(urlParams).toString();
     }
 
     try {
@@ -71,15 +76,11 @@ class Fetcher {
     const [error, setError] = useState<StatefulResponseError>(null);
     const [isLoading, setLoading] = useState(true);
 
-    const query = async (params: { [key: string]: any } = {}) => {
+    const query = async (params?: Params) => {
       setLoading(true);
       opts?.onLoadingStart?.();
 
-      const { data, error } = await this.request<T>(getSlashedUrl(url), {
-        headers: opts?.headers,
-        method: opts?.method,
-        params,
-      });
+      const { data, error } = await this.request<T>(url, { ...opts, params });
 
       setLoading(false);
       opts?.onLoadingEnd?.();
@@ -107,16 +108,11 @@ class Fetcher {
     const [error, setError] = useState<StatefulResponseError>(null);
     const [isLoading, setLoading] = useState(true);
 
-    const mutate = async (body: any, params?: { [key: string]: string }) => {
+    const mutate = async (body: any, params?: Params) => {
       setLoading(true);
       opts?.onLoadingStart?.();
 
-      const { data, error } = await this.request<T>(getSlashedUrl(url), {
-        body,
-        headers: opts?.headers,
-        method: opts?.method || "POST",
-        params,
-      });
+      const { data, error } = await this.request<T>(url, { ...opts, body, params });
 
       setLoading(false);
       opts?.onLoadingEnd?.();

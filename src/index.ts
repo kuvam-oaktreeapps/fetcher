@@ -106,7 +106,7 @@ class Fetcher {
   useMutation<T>(url: string, opts?: UseOptions<T>) {
     const [data, setData] = useState<T | null>(null);
     const [error, setError] = useState<StatefulResponseError>(null);
-    const [isLoading, setLoading] = useState(true);
+    const [isLoading, setLoading] = useState(false);
 
     const mutate = async (body: any, params?: Params) => {
       setLoading(true);

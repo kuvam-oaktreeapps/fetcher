@@ -88,9 +88,11 @@ class Fetcher {
       if (error) {
         setError(error);
         opts?.onError?.({ status: error.status, fetchResponse: error.fetchResponse, data });
+        setData(null);
       } else if (data) {
         setData(data);
         opts?.onSuccess?.(data);
+        setError(null);
       } else console.log("No data or error returned from request!");
 
       return { data, error };
@@ -120,9 +122,11 @@ class Fetcher {
       if (error) {
         setError(error);
         opts?.onError?.({ status: error.status, fetchResponse: error.fetchResponse, data });
+        setData(null);
       } else if (data) {
         setData(data);
         opts?.onSuccess?.(data);
+        setError(null);
       } else console.log("No data or error returned from request!");
 
       return { data, error };

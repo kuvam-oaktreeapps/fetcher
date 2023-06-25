@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
-import type { FetcherInit, MakeRequestOptions, Params, StatefulErrResponse, UseOptions } from "./types";
+import type {
+  FetcherInit,
+  MakeRequestOptions,
+  Params,
+  StatefulErrResponse,
+  UseOptions,
+} from "./types";
 import { getCleanUrl, joinableUrl } from "./utils/urls";
 
 type StatefulResponseError<T = any> = null | StatefulErrResponse<T>;

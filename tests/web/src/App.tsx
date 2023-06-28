@@ -14,7 +14,9 @@ export default function App() {
   const singleDino = fetcher.useQuery<Dino[]>("/dinos/Aardonyx");
 
   // Fetch paginated dinos
-  const paginatedDinos = fetcher.useQuery<Dino[]>(`/dinos`, { params: { offset: 0, take: 10 } });
+  const paginatedDinos = fetcher.useQuery<Dino[]>(`/dinos`, {
+    params: { offset: "0", take: "10" },
+  });
 
   // Update one dino
   const { mutate: updateDino, data: updatedDino } = fetcher.useMutation<Dino>("/dinos", {

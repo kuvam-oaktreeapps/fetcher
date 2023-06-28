@@ -3,7 +3,7 @@ type FetcherInit = {
   headers?: () => { [key: string]: string };
 };
 
-type Params = { pathname?: string; [key: string]: any };
+type Params = { pathname?: string; [key: string]: string };
 
 interface StatefulErrResponse<T = any> {
   status: number;

@@ -3,7 +3,7 @@ export type FetcherInit = {
   headers?: () => { [key: string]: string };
 };
 
-export type Params = { pathname?: string; [key: string]: any };
+export type Params = { pathname?: string; [key: string]: string };
 
 export interface StatefulErrResponse<T = any> {
   status: number;

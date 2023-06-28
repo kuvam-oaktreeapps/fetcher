@@ -86,7 +86,11 @@ class Fetcher {
       setLoading(true);
       opts?.onLoadingStart?.();
 
-      const { data, error } = await this.request<T>(url, { ...opts, params });
+      const { data, error } = await this.request<T>(url, {
+        headers: opts?.headers,
+        method: opts?.method || "GET",
+        params,
+      });
 
       setLoading(false);
       opts?.onLoadingEnd?.();
@@ -120,7 +124,12 @@ class Fetcher {
       setLoading(true);
       opts?.onLoadingStart?.();
 
-      const { data, error } = await this.request<T>(url, { ...opts, body, params });
+      const { data, error } = await this.request<T>(url, {
+        method: opts?.method || "POST",
+        headers: opts?.headers,
+        body,
+        params,
+      });
 
       setLoading(false);
       opts?.onLoadingEnd?.();

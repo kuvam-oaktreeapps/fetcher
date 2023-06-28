@@ -27,9 +27,7 @@
     "watch": "yarn build --watch",
     "prettify": "prettier --write \"src/**/*.{ts,js,json,tsx,jsx}\"",
     "test": "jest --detectOpenHandles --forceExit",
-    "postinstall": "husky install",
-    "prepack": "pinst --disable",
-    "postpack": "pinst --enable"
+    "postinstall": "husky install"
   },
   "devDependencies": {
     "@types/jest": "^29.5.2",
@@ -41,8 +39,7 @@
     "prettier": "^2.8.8",
     "puppeteer": "^20.7.3",
     "tsup": "^6.7.0",
-    "typescript": "^5.0.4",
-    "pinst": "^3.0.0"
+    "typescript": "^5.0.4"
   },
   "dependencies": {
     "react": "^18.2.0"
